@@ -140,3 +140,73 @@ pytest
 ## Current Development Status
 
 SmartCampus Assistant is under active development. Some features and API endpoints may not be available yet.
+
+
+# SmartCampus Assistant — Sample Knowledge Base
+
+This folder contains fictional ABC College documents for testing document loading, text extraction, metadata extraction, chunking, embeddings, indexing and RAG retrieval.
+
+## Files
+- `01_student_handbook.pdf` — multi-page student handbook
+- `02_admissions_guide_2026_2027.pdf` — multi-page admissions guide
+- `03_examination_regulations.docx` — examination rules and assessment procedures
+- `04_hostel_handbook.docx` — hostel fees, schedule, rules and safety
+- `05_fee_schedule_2026_2027.csv` — structured fee records
+- `06_library_notice.html` — HTML campus notice
+- `07_student_services_faq.md` — Markdown FAQ
+
+## Important
+All college details, email addresses, dates, rules and fees are synthetic sample data. They are not official ABC College policies and must not be represented as real-world facts.
+
+## Suggested ingestion tests
+1. Load each file type with the relevant loader.
+2. Print document count and metadata.
+3. Inspect extracted text from the first and last pages.
+4. Confirm page metadata is retained where the loader provides it.
+5. Compare how tables are extracted from PDF, DOCX and CSV.
+6. Ask questions that require combining information from different documents.
+
+
+## Document Ingestion
+
+SmartCampus Assistant uses **Docling** to load documents and extract their content.
+
+### Supported Features
+
+- Automatically discovers supported documents inside the `data/raw/` directory.
+- Recursively scans subdirectories for files.
+- Uses Docling for document loading and text extraction.
+- Exports extracted content in Markdown format.
+- Handles individual file-loading failures without stopping the entire ingestion process.
+- Detects exact duplicate documents using SHA-256 content hashing.
+- Normalizes whitespace before duplicate detection.
+- Skips empty documents.
+- Logs document loading and duplicate detection activities.
+
+### Supported File Types
+
+File extensions are discovered dynamically using Docling's `FormatToExtensions` mapping. Actual support depends on the installed Docling version and optional dependencies.
+
+### How to Run
+
+Place your documents inside:
+
+```text
+data/raw/
+```
+
+Run the loader:
+
+```bash
+python -m app.ingestion.loader
+```
+
+### Testing
+
+Run ingestion tests:
+
+```bash
+pytest tests/test_ingestion.py -v
+```
+
+The ingestion test suite currently covers file discovery, recursive scanning, duplicate detection, empty documents, document loading, and error handling.
