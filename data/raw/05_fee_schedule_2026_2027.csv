@@ -1,0 +1,7 @@
+fee_code,fee_name,programme,academic_year,amount_inr,frequency,due_date,notes
+FEE001,Examination Fee,All programmes,2026-2027,2000,Per examination registration,As per exam circular,Standard sample examination registration fee
+FEE002,Hostel Fee,All residential students,2026-2027,60000,Annual,Before hostel check-in,Includes accommodation and basic maintenance in this sample
+FEE003,Library Fee,All programmes,2026-2027,500,Annual,At semester registration,Sample library access and maintenance fee
+FEE004,Laboratory Fee,B.Tech,2026-2027,1000,Annual,At semester registration,Applies to laboratory-enabled programme activities
+FEE005,Registration Fee,All programmes,2026-2027,300,One-time,At admission,Sample student registration charge
+FEE006,Application Fee,"B.Tech, BBA, MBA",2026-2027,500,Per application,At application submission,Illustrative application processing fee; confirm current notice
