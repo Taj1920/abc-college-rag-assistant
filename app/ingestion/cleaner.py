@@ -48,4 +48,3 @@ class DocumentCleaner:
 
         logger.info(f"Document cleaning completed!. Input: {len(documents)} | Output: {len(cleaned_documents)}")
         return cleaned_documents
-
