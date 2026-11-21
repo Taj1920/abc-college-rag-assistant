@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from app.core.logger import get_logger
 from langchain_core.documents import Document
+
 #paths
 ROOT = Path(__file__).parents[2]
 #logger
@@ -35,5 +36,36 @@ class DocumentStorage:
             temp_path.unlink(missing_ok=True)
             logger.exception(f"Failed to save documents")
             raise
+    def load_documents(self) -> list[Document]:
+        if not self.file_path.exists():
+            logger.warning(f"File path does not exist: {self.file_path}")
+            return []
+        documents = []
+        try:
+            with open(self.file_path,"r",encoding="utf-8") as file:
+                for line in file:
+                    if not line.strip():
+                        continue
+                    record = json.loads(line)
+                    doc = Document(
+                        page_content = record["page_content"],
+                        metadata = record.get("metadata",{})   
+                    )
+                    documents.append(doc)
+
+            logger.info(f"loaded {len(documents)} documents")
+            return documents
+        except Exception:
+            logger.exception("Failed loading cleaned docs")
+            return []
+
+
+if __name__=="__main__":
+    storage = DocumentStorage()
+    stored_docs = storage.load_documents()
+    print(stored_docs)
+    
+
+
 
 
