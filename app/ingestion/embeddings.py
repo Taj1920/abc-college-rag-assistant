@@ -29,16 +29,7 @@ class TextEmbedder:
         except Exception:
             logger.exception("Failed to create embeddings")
             raise
-if __name__=="__main__":
-    from app.ingestion.storage import DocumentStorage
-    from app.ingestion.chunker import DocumentChunker
-    store = DocumentStorage()
-    cleaned_docs = store.load_documents()
-    chunker = DocumentChunker()
-    chunks = chunker.chunk_documents(cleaned_docs)
-    embedder = TextEmbedder()
-    vectors = embedder.create_embeddings(chunks)
-    print(vectors[0][:10])
+
 
 
         
