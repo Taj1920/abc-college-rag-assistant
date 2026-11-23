@@ -21,7 +21,10 @@ class Settings(BaseSettings):
 
     #cross- encoder
     cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
-    
+
+    retriever_k: int = 10
+    reranker_k:int=3
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
