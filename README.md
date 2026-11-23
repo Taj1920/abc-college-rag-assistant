@@ -1,6 +1,6 @@
 # SmartCampus Assistant
 
-An AI-powered college assistant for fictional ABC College. The project uses Retrieval-Augmented Generation (RAG) to answer student questions from college documents.
+An AI-powered college assistant. The project uses Retrieval-Augmented Generation (RAG) to answer student questions from college documents.
 
 > **Note:** ABC College information used in this project is fictional sample data. It must not be presented as official information about a real institution.
 
