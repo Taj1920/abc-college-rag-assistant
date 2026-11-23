@@ -4,6 +4,8 @@ from langchain_openai import ChatOpenAI
 from app.core.config import settings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.documents import Document
+from app.core.config import settings
+
 
 #---logger---
 logger = get_logger(__name__)
@@ -91,5 +93,6 @@ class RAGService:
 if __name__=="__main__":
     service = RAGService()
     query = "what is the daily schedule of the hostel?"
-    answer = service.generate_response(query)
+    answer = service.generate_response(query,settings.retriver_k,
+                                       settings.reranker_k)
     print(answer)
