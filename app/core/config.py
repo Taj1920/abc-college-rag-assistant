@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # Vector database settings
     chroma_persist_dir: Path = Path("storage/chroma_db")
 
+    #cross- encoder
+    cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
