@@ -32,3 +32,6 @@ tenacity
 # -------------------------------
 pytest
 httpx
+
+#concurency test
+locust
