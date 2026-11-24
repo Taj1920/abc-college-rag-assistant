@@ -201,6 +201,7 @@ def test_load_all_documents_successfully(
     assert len(documents) == 1
     assert isinstance(documents[0], Document)
     assert documents[0].page_content == expected_doc.page_content
+    assert documents[0].metadata["source"] == "handbook.pdf"
 
     mock_docling.assert_called_once()
 
