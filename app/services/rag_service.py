@@ -14,6 +14,7 @@ class RAGService:
     def __init__(self):
         self.retrieval_service=RetrievalService()
         self.llm = ChatOpenAI(
+            base_url="https://openrouter.ai/api/v1",
             model=settings.llm_model,
             api_key=settings.openai_api_key
             )
