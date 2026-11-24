@@ -125,8 +125,8 @@ def test_end_to_end_rag_pipeline(
         # 6. Validate final response
         # -----------------------------------
 
-        assert isinstance(answer, str)
-        assert "Rs. 2000" in answer
+        assert isinstance(answer, dict)
+        assert "Rs. 2000" in answer["answer"]
 
         # Verify LLM was called
         mock_chat_model.return_value.invoke.assert_called_once()

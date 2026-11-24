@@ -129,7 +129,13 @@ def test_generate_response_success(
         "What is the examination fee?"
     )
 
-    assert response == "The examination fee is Rs. 2000."
+    assert response == {
+        "answer": "The examination fee is Rs. 2000.",
+        "sources": [
+            {"source": "exam_fee.pdf", "score": 0.95},
+            {"source": "academic_rules.pdf", "score": 0.85},
+        ],
+    }
 
     rag_service.retrieval_service.retrieve_relevant_documents.assert_called_once_with(
         "What is the examination fee?",
@@ -190,9 +196,10 @@ def test_generate_response_no_documents(rag_service):
         "What is the examination fee?"
     )
 
-    assert response == (
-        "I don't have enough information to answer your question."
-    )
+    assert response == {
+        "answer": "I don't have enough information to answer your question.",
+        "sources": [],
+    }
 
     rag_service.llm.invoke.assert_not_called()
 

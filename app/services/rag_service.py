@@ -82,7 +82,10 @@ class RAGService:
             reranked_docs  = [doc for doc,score in reranked_documents]
             
             if not reranked_docs:
-                return "I don't have enough information to answer your question."
+                return {
+                    "answer": "I don't have enough information to answer your question.",
+                    "sources": []
+                }
             
             rag_prompt = self.build_prompt(reranked_docs,users_query)
             

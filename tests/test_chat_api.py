@@ -69,8 +69,13 @@ SAMPLE_RESPONSE = {
 # Health API tests
 # -------------------------
 
-def test_health_check(client):
-    app.state.rag_service = MagicMock()
+def test_health_check(client, monkeypatch):
+    monkeypatch.setattr(
+        app.state, "rag_service", MagicMock(), raising=False
+    )
+    monkeypatch.setattr(
+        app.state, "ingestion_service", MagicMock(), raising=False
+    )
 
     response = client.get("/health")
 

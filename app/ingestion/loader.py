@@ -64,7 +64,11 @@ class DataLoader:
                     )
                 docs = loader.load()
                 for doc in docs:
-                    doc.metadata["source"] = str(file.relative_to(ROOT)).replace("\\","/")
+                        try:
+                            source_path = file.relative_to(ROOT)
+                        except ValueError:
+                            source_path = file.relative_to(self.docs_path)
+                        doc.metadata["source"] = source_path.as_posix()
                 all_documents.extend(docs)
                 logger.info(f"Successfully loaded {file.name} | documents: {len(docs)}")
             except Exception:
