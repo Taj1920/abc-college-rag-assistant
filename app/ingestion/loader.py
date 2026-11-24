@@ -63,6 +63,8 @@ class DataLoader:
                     export_type=ExportType.MARKDOWN
                     )
                 docs = loader.load()
+                for doc in docs:
+                    doc.metadata["source"] = str(file.relative_to(ROOT)).replace("\\","/")
                 all_documents.extend(docs)
                 logger.info(f"Successfully loaded {file.name} | documents: {len(docs)}")
             except Exception:
@@ -72,3 +74,7 @@ class DataLoader:
         logger.info(f"unique documents after de duplication: {len(unique_docs)}")
         return unique_docs
 
+if __name__=="__main__":
+    loader = DataLoader()
+    docs = loader.load_all_documents()
+    print(docs)
