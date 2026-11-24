@@ -70,29 +70,47 @@ class RAGService:
             logger.exception("Failed to build RAG prompt!")
             raise
     def generate_response(self,users_query:str,retrieve_k:int=10,
-                          rerank_k:int=3)->str:
+                          rerank_k:int=3)->dict:
         if not users_query or not users_query.strip():
             raise ValueError("Users query must not be empty!")
         
         try:
-            reranked_docs = self.retrieval_service.retrieve_relevant_documents(users_query,
+            reranked_documents = self.retrieval_service.retrieve_relevant_documents(users_query,
                                                                                retrieve_k,
                                                                                rerank_k)
-            reranked_docs  = [doc for doc,score in reranked_docs] 
+            reranked_docs  = [doc for doc,score in reranked_documents]
+            
             if not reranked_docs:
                 return "I don't have enough information to answer your question."
+            
             rag_prompt = self.build_prompt(reranked_docs,users_query)
+            
             logger.info("llm generating response...")
+            
             response = self.llm.invoke(rag_prompt)
+            
             logger.info("Response generated successfully!")
-            return response.content
+
+            sources = {}
+            for doc,score in reranked_documents:
+                source = doc.metadata.get("source","unknown")
+                sources[source] = {
+                    "source":source,
+                    "score":score
+                }
+            sources = list(sources.values())
+            
+            return {
+                "answer":response.content,
+                "sources":sources
+            }
         except Exception:
-            logger.info("Response generation failed!")
+            logger.exception("Response generation failed!")
             raise
 
 if __name__=="__main__":
     service = RAGService()
-    query = "what is the daily schedule of the hostel?"
-    answer = service.generate_response(query,settings.retriver_k,
+    query = "what is the library fee?"
+    response = service.generate_response(query,settings.retriever_k,
                                        settings.reranker_k)
-    print(answer)
+    print(response)

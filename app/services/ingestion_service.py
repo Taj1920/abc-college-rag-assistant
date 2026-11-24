@@ -82,4 +82,6 @@ class IngestionService:
             raise
 
         
-
+if __name__=="__main__":
+    service = IngestionService()
+    service.ingest_documents()
