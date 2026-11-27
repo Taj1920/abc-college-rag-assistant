@@ -236,3 +236,6 @@ data/processed/*
 # Preserve folder structure
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+
+#run time storage
+storage/

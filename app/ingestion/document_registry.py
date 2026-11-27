@@ -97,7 +97,7 @@ class DocumentRegistry:
             logger.exception("Document insertion failed")
             raise
         finally:
-            if cursor is not None:
+            if conn is not None:
                 conn.close()
 
     def update_document_status(self,document_id:str,status:str,processed_at:str | None=None):
