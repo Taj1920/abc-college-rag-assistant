@@ -16,7 +16,7 @@ class DataLoader:
         self.docs_path = ROOT / "data" / "raw"
         self.supported_ext = {ext.lower() for exts in FormatToExtensions.values() for ext in exts}
         logger.info("Data Loader initialized...")
-
+    
     def discover_files(self) -> list[Path]:
         if not self.docs_path.exists():
             logger.error(f"Data directory doesnot exist {self.docs_path}")
@@ -77,6 +77,40 @@ class DataLoader:
         unique_docs = self.remove_duplicate_docs(all_documents)
         logger.info(f"unique documents after de duplication: {len(unique_docs)}")
         return unique_docs
+
+    def load_file(self,file_path:Path) -> list[Document]:  
+            file_path=Path(file_path)
+            if not file_path.exists() or not file_path.is_file():
+                raise FileNotFoundError(f"Document not found : {file_path}")
+
+            extension = file_path.suffix.lower().lstrip(".")
+
+            if extension not in self.supported_ext:
+                raise ValueError(f"Unsupported file extension: {extension}")
+
+            try:
+                logger.info(f"Loading uploaded file: {file_path}..")
+                loader = DoclingLoader(
+                    file_path=str(file_path),
+                    export_type=ExportType.MARKDOWN
+                    )
+                docs = loader.load()
+                for doc in docs:
+                    try:
+                        source_path = file_path.relative_to(ROOT)
+                    except ValueError:
+                        source_path = file_path.relative_to(self.docs_path)
+
+                    doc.metadata["source"] = source_path.as_posix()
+
+                unique_docs = self.remove_duplicate_docs(docs)
+                logger.info(f"Successfully loaded {file_path.name} | documents: {len(unique_docs)}")
+                return unique_docs
+            except Exception:
+                logger.exception(f"Failed to load file: {file_path}")
+                raise 
+        
+
 
 if __name__=="__main__":
     loader = DataLoader()
