@@ -159,7 +159,7 @@ def ingest_documents(ingestion_service:IngestionService = Depends(get_ingestion_
         )
 
 #---file upload api (upload a file and ingestion triggers in the background for that file)---
-@app.post("/api/v1/documents/upload")
+@app.post("/api/v1/documents/upload",status_code=202)
 async def upload_document(background_tasks:BackgroundTasks,
                           uploaded_file:UploadFile=File(...),
                           registry:DocumentRegistry = Depends(get_document_registry),
