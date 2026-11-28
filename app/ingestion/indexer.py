@@ -1,6 +1,7 @@
 import hashlib
 from app.core.config import settings
-from langchain_chroma import Chroma
+from pinecone import Pinecone,ServerlessSpec
+from langchain_pinecone import PineconeVectorStore
 from pathlib import Path
 from app.core.logger import get_logger
 from langchain_core.documents import Document
@@ -14,12 +15,22 @@ ROOT = Path(__file__).parents[2]
 class VectorStore:
     def __init__(self,embedding):
         try:
-            persist_dir = ROOT / settings.chroma_persist_dir
-            persist_dir.mkdir(parents=True,exist_ok=True)
-            self.chroma_store = Chroma(collection_name="smartcampus_documents",
-                                       persist_directory=str(persist_dir),
-                                       embedding_function=embedding,
-                                    )
+            pc = Pinecone(api_key=settings.pinecone_api_key.get_secret_value())
+            if not pc.has_index(settings.pinecone_index_name):
+                pc.create_index(
+                    name=settings.pinecone_index_name,
+                    metric="cosine",
+                    dimension=384,
+                    spec = ServerlessSpec(cloud="aws",region="us-east-1")
+                )
+
+            index = pc.Index(settings.pinecone_index_name)
+
+            self.pinecone_store = PineconeVectorStore(
+                index=index,
+                embedding=embedding
+            )
+
             logger.info("Vector store initialized successfully!")
         except Exception:
             logger.exception("Vector store initialization failed!")
@@ -33,7 +44,8 @@ class VectorStore:
             unique_content.encode("utf-8")
         ).hexdigest()
     
-    def add_documents(self,documents:list[Document])-> list[str]:
+    def add_documents(self,documents:list[Document],
+                      namespace:str | None=None)-> list[str]:
         if not documents:
             logger.warning("No documents provided for indexing.")
             return []
@@ -47,11 +59,19 @@ class VectorStore:
 
             ids = list(unique_documents.keys())
             docs = list(unique_documents.values())
+            add_kwargs = {
+                "documents": docs,
+                "ids": ids
+            }
 
-            stored_ids = self.chroma_store.add_documents(
-                documents=docs,
-                ids=ids
-            )
+            if namespace:
+                add_kwargs["namespace"] = namespace
+
+            stored_ids = self.pinecone_store.add_documents(**add_kwargs)
+            # stored_ids = self.pinecone_store.add_documents(
+            #     documents=docs,
+            #     ids=ids
+            # )
             logger.info(f"successfully added {len(stored_ids)} documents to vector store")
             return stored_ids
         except Exception:

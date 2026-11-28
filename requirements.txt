@@ -14,8 +14,8 @@ langchain_huggingface
 sentence_transformers
 
 # Vector Database
-langchain-chroma
-chromadb
+pinecone
+langchain_pinecone
 
 # Backend API
 fastapi[standard]

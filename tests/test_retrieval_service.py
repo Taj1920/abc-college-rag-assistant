@@ -172,7 +172,7 @@ def test_no_documents_retrieved(retrieval_service):
 # 11. Test retriever failure
 def test_retriever_failure(retrieval_service):
     retrieval_service.retriever.retrieve.side_effect = RuntimeError(
-        "ChromaDB retrieval failed"
+    "Pinecone retrieval failed"
     )
 
     with pytest.raises(RuntimeError):

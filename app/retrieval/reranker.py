@@ -30,7 +30,7 @@ class Reranker:
             pairs = [(users_query,doc.page_content) for doc in documents]
             relevance_scores = self.cross_encoder.predict(pairs)
             logger.info(f"Calculated relevance score for {len(documents)} documents!")
-
+            
             #map documents and relevance scores
             scored_documents = zip(documents,relevance_scores)
 

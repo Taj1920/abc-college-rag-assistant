@@ -17,7 +17,8 @@ class Settings(BaseSettings):
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Vector database settings
-    chroma_persist_dir: Path = Path("storage/chroma_db")
+    pinecone_api_key: SecretStr | None = None
+    pinecone_index_name : str = "smartcampus_assistant"
 
     #cross- encoder
     cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L6-v2"

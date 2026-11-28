@@ -11,7 +11,7 @@ class Retriever:
         try:
             embedder = TextEmbedder()
 
-            self.chroma_store = VectorStore(embedder.embedding_model).chroma_store
+            self.pinecone_store = VectorStore(embedder.embedding_model).pinecone_store
             
             logger.info(f"Retriver initialized successfully!")
         except Exception:
@@ -27,7 +27,7 @@ class Retriever:
 
         try:
             logger.info("Retrieving relevant document...")
-            results = self.chroma_store.similarity_search(
+            results = self.pinecone_store.similarity_search(
                                             query = users_query,
                                             k = k)
             logger.info(f"Retrieved top-{len(results)} relevant documents")
